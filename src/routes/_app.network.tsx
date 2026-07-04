@@ -13,7 +13,6 @@ const ForceGraph2D = lazy(() => import("react-force-graph-2d"));
 
 export const Route = createFileRoute("/_app/network")({
   head: () => ({ meta: [{ title: "Criminal Network — Crime Intelligence Assistant" }] }),
-  ssr: false,
   component: NetworkPage,
 });
 
