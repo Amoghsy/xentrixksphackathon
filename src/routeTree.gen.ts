@@ -13,6 +13,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppNetworkRouteImport } from './routes/_app.network'
+import { Route as AppMapRouteImport } from './routes/_app.map'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAuditRouteImport } from './routes/_app.audit'
 import { Route as AppAlertsRouteImport } from './routes/_app.alerts'
@@ -38,6 +40,16 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNetworkRoute = AppNetworkRouteImport.update({
+  id: '/network',
+  path: '/network',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMapRoute = AppMapRouteImport.update({
+  id: '/map',
+  path: '/map',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -82,6 +94,8 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AppAlertsRoute
   '/audit': typeof AppAuditRoute
   '/dashboard': typeof AppDashboardRoute
+  '/map': typeof AppMapRoute
+  '/network': typeof AppNetworkRoute
   '/settings': typeof AppSettingsRoute
   '/cases/$firId': typeof AppCasesFirIdRoute
   '/offenders/$id': typeof AppOffendersIdRoute
@@ -93,6 +107,8 @@ export interface FileRoutesByTo {
   '/alerts': typeof AppAlertsRoute
   '/audit': typeof AppAuditRoute
   '/dashboard': typeof AppDashboardRoute
+  '/map': typeof AppMapRoute
+  '/network': typeof AppNetworkRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
   '/cases/$firId': typeof AppCasesFirIdRoute
@@ -107,6 +123,8 @@ export interface FileRoutesById {
   '/_app/alerts': typeof AppAlertsRoute
   '/_app/audit': typeof AppAuditRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/map': typeof AppMapRoute
+  '/_app/network': typeof AppNetworkRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
   '/_app/cases/$firId': typeof AppCasesFirIdRoute
@@ -122,6 +140,8 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/audit'
     | '/dashboard'
+    | '/map'
+    | '/network'
     | '/settings'
     | '/cases/$firId'
     | '/offenders/$id'
@@ -133,6 +153,8 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/audit'
     | '/dashboard'
+    | '/map'
+    | '/network'
     | '/settings'
     | '/'
     | '/cases/$firId'
@@ -146,6 +168,8 @@ export interface FileRouteTypes {
     | '/_app/alerts'
     | '/_app/audit'
     | '/_app/dashboard'
+    | '/_app/map'
+    | '/_app/network'
     | '/_app/settings'
     | '/_app/'
     | '/_app/cases/$firId'
@@ -187,6 +211,20 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/network': {
+      id: '/_app/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof AppNetworkRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/map': {
+      id: '/_app/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof AppMapRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/dashboard': {
@@ -245,6 +283,8 @@ interface AppRouteChildren {
   AppAlertsRoute: typeof AppAlertsRoute
   AppAuditRoute: typeof AppAuditRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppMapRoute: typeof AppMapRoute
+  AppNetworkRoute: typeof AppNetworkRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCasesFirIdRoute: typeof AppCasesFirIdRoute
@@ -257,6 +297,8 @@ const AppRouteChildren: AppRouteChildren = {
   AppAlertsRoute: AppAlertsRoute,
   AppAuditRoute: AppAuditRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppMapRoute: AppMapRoute,
+  AppNetworkRoute: AppNetworkRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
   AppCasesFirIdRoute: AppCasesFirIdRoute,
