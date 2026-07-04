@@ -9,50 +9,309 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AppRouteImport } from './routes/_app'
+import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppNetworkRouteImport } from './routes/_app.network'
+import { Route as AppMapRouteImport } from './routes/_app.map'
+import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppAuditRouteImport } from './routes/_app.audit'
+import { Route as AppAlertsRouteImport } from './routes/_app.alerts'
+import { Route as AppOffendersIndexRouteImport } from './routes/_app.offenders.index'
+import { Route as AppCasesIndexRouteImport } from './routes/_app.cases.index'
+import { Route as AppOffendersIdRouteImport } from './routes/_app.offenders.$id'
+import { Route as AppCasesFirIdRouteImport } from './routes/_app.cases.$firId'
 
-const IndexRoute = IndexRouteImport.update({
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNetworkRoute = AppNetworkRouteImport.update({
+  id: '/network',
+  path: '/network',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMapRoute = AppMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAuditRoute = AppAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAlertsRoute = AppAlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOffendersIndexRoute = AppOffendersIndexRouteImport.update({
+  id: '/offenders/',
+  path: '/offenders/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCasesIndexRoute = AppCasesIndexRouteImport.update({
+  id: '/cases/',
+  path: '/cases/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOffendersIdRoute = AppOffendersIdRouteImport.update({
+  id: '/offenders/$id',
+  path: '/offenders/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCasesFirIdRoute = AppCasesFirIdRouteImport.update({
+  id: '/cases/$firId',
+  path: '/cases/$firId',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppIndexRoute
+  '/login': typeof LoginRoute
+  '/alerts': typeof AppAlertsRoute
+  '/audit': typeof AppAuditRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/map': typeof AppMapRoute
+  '/network': typeof AppNetworkRoute
+  '/settings': typeof AppSettingsRoute
+  '/cases/$firId': typeof AppCasesFirIdRoute
+  '/offenders/$id': typeof AppOffendersIdRoute
+  '/cases/': typeof AppCasesIndexRoute
+  '/offenders/': typeof AppOffendersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/alerts': typeof AppAlertsRoute
+  '/audit': typeof AppAuditRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/map': typeof AppMapRoute
+  '/network': typeof AppNetworkRoute
+  '/settings': typeof AppSettingsRoute
+  '/': typeof AppIndexRoute
+  '/cases/$firId': typeof AppCasesFirIdRoute
+  '/offenders/$id': typeof AppOffendersIdRoute
+  '/cases': typeof AppCasesIndexRoute
+  '/offenders': typeof AppOffendersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_app/alerts': typeof AppAlertsRoute
+  '/_app/audit': typeof AppAuditRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/map': typeof AppMapRoute
+  '/_app/network': typeof AppNetworkRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/': typeof AppIndexRoute
+  '/_app/cases/$firId': typeof AppCasesFirIdRoute
+  '/_app/offenders/$id': typeof AppOffendersIdRoute
+  '/_app/cases/': typeof AppCasesIndexRoute
+  '/_app/offenders/': typeof AppOffendersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/alerts'
+    | '/audit'
+    | '/dashboard'
+    | '/map'
+    | '/network'
+    | '/settings'
+    | '/cases/$firId'
+    | '/offenders/$id'
+    | '/cases/'
+    | '/offenders/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/login'
+    | '/alerts'
+    | '/audit'
+    | '/dashboard'
+    | '/map'
+    | '/network'
+    | '/settings'
+    | '/'
+    | '/cases/$firId'
+    | '/offenders/$id'
+    | '/cases'
+    | '/offenders'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/login'
+    | '/_app/alerts'
+    | '/_app/audit'
+    | '/_app/dashboard'
+    | '/_app/map'
+    | '/_app/network'
+    | '/_app/settings'
+    | '/_app/'
+    | '/_app/cases/$firId'
+    | '/_app/offenders/$id'
+    | '/_app/cases/'
+    | '/_app/offenders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app/': {
+      id: '/_app/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/network': {
+      id: '/_app/network'
+      path: '/network'
+      fullPath: '/network'
+      preLoaderRoute: typeof AppNetworkRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/map': {
+      id: '/_app/map'
+      path: '/map'
+      fullPath: '/map'
+      preLoaderRoute: typeof AppMapRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/audit': {
+      id: '/_app/audit'
+      path: '/audit'
+      fullPath: '/audit'
+      preLoaderRoute: typeof AppAuditRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/alerts': {
+      id: '/_app/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AppAlertsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/offenders/': {
+      id: '/_app/offenders/'
+      path: '/offenders'
+      fullPath: '/offenders/'
+      preLoaderRoute: typeof AppOffendersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cases/': {
+      id: '/_app/cases/'
+      path: '/cases'
+      fullPath: '/cases/'
+      preLoaderRoute: typeof AppCasesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/offenders/$id': {
+      id: '/_app/offenders/$id'
+      path: '/offenders/$id'
+      fullPath: '/offenders/$id'
+      preLoaderRoute: typeof AppOffendersIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cases/$firId': {
+      id: '/_app/cases/$firId'
+      path: '/cases/$firId'
+      fullPath: '/cases/$firId'
+      preLoaderRoute: typeof AppCasesFirIdRouteImport
+      parentRoute: typeof AppRoute
     }
   }
 }
 
+interface AppRouteChildren {
+  AppAlertsRoute: typeof AppAlertsRoute
+  AppAuditRoute: typeof AppAuditRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppMapRoute: typeof AppMapRoute
+  AppNetworkRoute: typeof AppNetworkRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppIndexRoute: typeof AppIndexRoute
+  AppCasesFirIdRoute: typeof AppCasesFirIdRoute
+  AppOffendersIdRoute: typeof AppOffendersIdRoute
+  AppCasesIndexRoute: typeof AppCasesIndexRoute
+  AppOffendersIndexRoute: typeof AppOffendersIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAlertsRoute: AppAlertsRoute,
+  AppAuditRoute: AppAuditRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppMapRoute: AppMapRoute,
+  AppNetworkRoute: AppNetworkRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppIndexRoute: AppIndexRoute,
+  AppCasesFirIdRoute: AppCasesFirIdRoute,
+  AppOffendersIdRoute: AppOffendersIdRoute,
+  AppCasesIndexRoute: AppCasesIndexRoute,
+  AppOffendersIndexRoute: AppOffendersIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
