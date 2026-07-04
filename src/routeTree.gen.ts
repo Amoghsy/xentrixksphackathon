@@ -16,6 +16,10 @@ import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAuditRouteImport } from './routes/_app.audit'
 import { Route as AppAlertsRouteImport } from './routes/_app.alerts'
+import { Route as AppOffendersIndexRouteImport } from './routes/_app.offenders.index'
+import { Route as AppCasesIndexRouteImport } from './routes/_app.cases.index'
+import { Route as AppOffendersIdRouteImport } from './routes/_app.offenders.$id'
+import { Route as AppCasesFirIdRouteImport } from './routes/_app.cases.$firId'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -51,6 +55,26 @@ const AppAlertsRoute = AppAlertsRouteImport.update({
   path: '/alerts',
   getParentRoute: () => AppRoute,
 } as any)
+const AppOffendersIndexRoute = AppOffendersIndexRouteImport.update({
+  id: '/offenders/',
+  path: '/offenders/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCasesIndexRoute = AppCasesIndexRouteImport.update({
+  id: '/cases/',
+  path: '/cases/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOffendersIdRoute = AppOffendersIdRouteImport.update({
+  id: '/offenders/$id',
+  path: '/offenders/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCasesFirIdRoute = AppCasesFirIdRouteImport.update({
+  id: '/cases/$firId',
+  path: '/cases/$firId',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -59,6 +83,10 @@ export interface FileRoutesByFullPath {
   '/audit': typeof AppAuditRoute
   '/dashboard': typeof AppDashboardRoute
   '/settings': typeof AppSettingsRoute
+  '/cases/$firId': typeof AppCasesFirIdRoute
+  '/offenders/$id': typeof AppOffendersIdRoute
+  '/cases/': typeof AppCasesIndexRoute
+  '/offenders/': typeof AppOffendersIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
@@ -67,6 +95,10 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AppDashboardRoute
   '/settings': typeof AppSettingsRoute
   '/': typeof AppIndexRoute
+  '/cases/$firId': typeof AppCasesFirIdRoute
+  '/offenders/$id': typeof AppOffendersIdRoute
+  '/cases': typeof AppCasesIndexRoute
+  '/offenders': typeof AppOffendersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,12 +109,36 @@ export interface FileRoutesById {
   '/_app/dashboard': typeof AppDashboardRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/cases/$firId': typeof AppCasesFirIdRoute
+  '/_app/offenders/$id': typeof AppOffendersIdRoute
+  '/_app/cases/': typeof AppCasesIndexRoute
+  '/_app/offenders/': typeof AppOffendersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/alerts' | '/audit' | '/dashboard' | '/settings'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/alerts'
+    | '/audit'
+    | '/dashboard'
+    | '/settings'
+    | '/cases/$firId'
+    | '/offenders/$id'
+    | '/cases/'
+    | '/offenders/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/alerts' | '/audit' | '/dashboard' | '/settings' | '/'
+  to:
+    | '/login'
+    | '/alerts'
+    | '/audit'
+    | '/dashboard'
+    | '/settings'
+    | '/'
+    | '/cases/$firId'
+    | '/offenders/$id'
+    | '/cases'
+    | '/offenders'
   id:
     | '__root__'
     | '/_app'
@@ -92,6 +148,10 @@ export interface FileRouteTypes {
     | '/_app/dashboard'
     | '/_app/settings'
     | '/_app/'
+    | '/_app/cases/$firId'
+    | '/_app/offenders/$id'
+    | '/_app/cases/'
+    | '/_app/offenders/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -150,6 +210,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAlertsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/offenders/': {
+      id: '/_app/offenders/'
+      path: '/offenders'
+      fullPath: '/offenders/'
+      preLoaderRoute: typeof AppOffendersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cases/': {
+      id: '/_app/cases/'
+      path: '/cases'
+      fullPath: '/cases/'
+      preLoaderRoute: typeof AppCasesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/offenders/$id': {
+      id: '/_app/offenders/$id'
+      path: '/offenders/$id'
+      fullPath: '/offenders/$id'
+      preLoaderRoute: typeof AppOffendersIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/cases/$firId': {
+      id: '/_app/cases/$firId'
+      path: '/cases/$firId'
+      fullPath: '/cases/$firId'
+      preLoaderRoute: typeof AppCasesFirIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -159,6 +247,10 @@ interface AppRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppCasesFirIdRoute: typeof AppCasesFirIdRoute
+  AppOffendersIdRoute: typeof AppOffendersIdRoute
+  AppCasesIndexRoute: typeof AppCasesIndexRoute
+  AppOffendersIndexRoute: typeof AppOffendersIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -167,6 +259,10 @@ const AppRouteChildren: AppRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppCasesFirIdRoute: AppCasesFirIdRoute,
+  AppOffendersIdRoute: AppOffendersIdRoute,
+  AppCasesIndexRoute: AppCasesIndexRoute,
+  AppOffendersIndexRoute: AppOffendersIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
