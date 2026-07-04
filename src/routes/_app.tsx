@@ -4,6 +4,7 @@ import { Topbar } from "@/components/app/topbar";
 import { useAuthStore } from "@/stores/auth";
 
 export const Route = createFileRoute("/_app")({
+  ssr: false,
   beforeLoad: () => {
     if (typeof window === "undefined") return;
     const user = useAuthStore.getState().user;
