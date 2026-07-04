@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Crime Intelligence Assistant — Karnataka SCRB" },
+      { title: "XENTRIX KSP HAKCATHON" },
       {
         name: "description",
         content:
           "Internal law-enforcement console for the Karnataka State Crime Records Bureau — natural-language crime data query, analytics, and investigation tools.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Crime Intelligence Assistant — Karnataka SCRB" },
+      { property: "og:title", content: "XENTRIX KSP HAKCATHON" },
       {
         property: "og:description",
         content:
@@ -92,6 +92,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "XENTRIX KSP HAKCATHON" },
+      { name: "description", content: "Crime Intelligence Assistant: A secure web app for Karnataka Police to query crime data via natural language and explore insights." },
+      { property: "og:description", content: "Crime Intelligence Assistant: A secure web app for Karnataka Police to query crime data via natural language and explore insights." },
+      { name: "twitter:description", content: "Crime Intelligence Assistant: A secure web app for Karnataka Police to query crime data via natural language and explore insights." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/47d705ce-7ce2-4b45-a482-f84a5b0b7233/id-preview-883e7793--0f4dbe64-d15a-4b75-87aa-601a3e081901.lovable.app-1783188480273.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/47d705ce-7ce2-4b45-a482-f84a5b0b7233/id-preview-883e7793--0f4dbe64-d15a-4b75-87aa-601a3e081901.lovable.app-1783188480273.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
