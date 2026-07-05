@@ -4,6 +4,8 @@ import { useState } from "react";
 import { PageHeader } from "@/components/app/primitives";
 import { getHotspots } from "@/services/api";
 import { DISTRICTS, CRIME_HEADS, GRAVITY } from "@/mocks/firs";
+import { KARNATAKA_PATH } from "@/mocks/karnataka-map";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
