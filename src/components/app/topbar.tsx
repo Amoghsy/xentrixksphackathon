@@ -30,7 +30,7 @@ export function Topbar() {
   };
 
   return (
-    <header className="flex items-center gap-3 border-b border-border bg-card px-4 py-2.5 h-14">
+    <header className="flex items-center gap-3 border-b border-border bg-card px-4 h-14 shrink-0">
       <div className="relative flex-1 max-w-xl">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
@@ -40,12 +40,12 @@ export function Topbar() {
         />
       </div>
 
-      <div className="flex items-center gap-1.5">
-        <div className="flex items-center rounded-md border border-input overflow-hidden text-xs">
+      <div className="flex items-center gap-2">
+        <div className="flex items-center h-9 rounded-md border border-input overflow-hidden text-xs">
           <button
             onClick={() => setLang("en")}
             className={cn(
-              "px-2.5 py-1.5 font-medium",
+              "h-full px-2.5 font-medium flex items-center",
               lang === "en" ? "bg-primary text-primary-foreground" : "hover:bg-accent",
             )}
           >
@@ -54,7 +54,7 @@ export function Topbar() {
           <button
             onClick={() => setLang("kn")}
             className={cn(
-              "px-2.5 py-1.5 font-medium",
+              "h-full px-2.5 font-medium flex items-center",
               lang === "kn" ? "bg-primary text-primary-foreground" : "hover:bg-accent",
             )}
           >
@@ -72,26 +72,26 @@ export function Topbar() {
 
         <button className="relative h-9 w-9 rounded-md hover:bg-accent flex items-center justify-center">
           <Bell className="h-4 w-4" />
-          <span className="absolute top-1.5 right-1.5 h-4 min-w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center px-1">
+          <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center px-1">
             3
           </span>
         </button>
 
+        <div className="hidden md:block h-6 w-px bg-border mx-1" />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 pl-2 pr-1 h-9 rounded-md hover:bg-accent">
+            <button className="flex items-center gap-2 px-1.5 h-9 rounded-md hover:bg-accent">
               <Avatar className="h-7 w-7">
                 <AvatarFallback className="bg-primary text-primary-foreground text-xs">
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden md:block text-left">
-                <div className="text-xs font-medium leading-tight">{user?.name}</div>
-                <div className="text-[10px] text-muted-foreground leading-tight">
-                  {user?.badgeNo}
-                </div>
+              <div className="hidden md:flex flex-col text-left leading-tight">
+                <span className="text-xs font-medium">{user?.name}</span>
+                <span className="text-[10px] text-muted-foreground">{user?.badgeNo}</span>
               </div>
-              <Badge className={cn("ml-1 hidden md:inline-flex", roleColor[user?.role ?? ""])}>
+              <Badge className={cn("hidden md:inline-flex ml-1", roleColor[user?.role ?? ""])}>
                 {user?.role}
               </Badge>
             </button>
