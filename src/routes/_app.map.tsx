@@ -4,6 +4,8 @@ import { useState } from "react";
 import { PageHeader } from "@/components/app/primitives";
 import { getHotspots } from "@/services/api";
 import { DISTRICTS, CRIME_HEADS, GRAVITY } from "@/mocks/firs";
+import { KARNATAKA_PATH } from "@/mocks/karnataka-map";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -110,14 +112,16 @@ function MapPage() {
           {isLoading || !data ? (
             <Skeleton className="absolute inset-4" />
           ) : (
-            <svg viewBox="0 0 100 100" className="w-full h-full">
-              {/* Stylised Karnataka outline */}
+            <svg viewBox="0 0 100 120" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+              {/* Karnataka state outline (simplified from GADM boundary) */}
               <path
-                d="M15,10 L60,5 L80,15 L85,35 L80,55 L70,75 L55,90 L35,88 L20,75 L10,55 L12,30 Z"
+                d={KARNATAKA_PATH}
                 fill="var(--color-muted)"
-                stroke="var(--color-border)"
-                strokeWidth="0.4"
+                stroke="var(--color-primary)"
+                strokeWidth="0.35"
+                strokeLinejoin="round"
               />
+
               {/* Hotspot circles */}
               {data.map((h) => (
                 <g key={h.district} className="cursor-pointer" onClick={() => setSelected(h.district)}>
