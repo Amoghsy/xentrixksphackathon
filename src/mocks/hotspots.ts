@@ -11,22 +11,24 @@ export interface Hotspot {
 }
 
 // Rough relative positions of KA districts on a stylised map (not geographic)
+// Positions in the same 0..100 viewBox used by the Karnataka SVG path
 const POS: Record<string, [number, number]> = {
-  "Bengaluru Urban": [72, 62],
-  "Bengaluru Rural": [70, 56],
-  Mysuru: [58, 78],
-  Mangaluru: [30, 72],
-  Belagavi: [22, 20],
-  Kalaburagi: [55, 12],
-  "Hubballi-Dharwad": [32, 34],
-  Tumakuru: [62, 55],
-  Shivamogga: [42, 55],
-  Ballari: [58, 32],
-  Vijayapura: [40, 15],
-  Udupi: [28, 62],
-  Chitradurga: [55, 45],
-  Hassan: [48, 65],
+  "Bengaluru Urban": [67.15, 77.93],
+  "Bengaluru Rural": [68.65, 74.52],
+  Mysuru: [54.3, 87.09],
+  Mangaluru: [29.71, 79.3],
+  Belagavi: [24.93, 38.58],
+  Kalaburagi: [56.76, 18.36],
+  "Hubballi-Dharwad": [33.4, 45.27],
+  Tumakuru: [60.45, 72.88],
+  Shivamogga: [39.41, 64.81],
+  Ballari: [57.99, 48.28],
+  Vijayapura: [41.6, 25.19],
+  Udupi: [28.2, 72.88],
+  Chitradurga: [50.89, 60.71],
+  Hassan: [46.79, 77.52],
 };
+
 
 const CRIME_DOM = ["Theft", "Vehicle Theft", "Cybercrime", "Robbery", "Cheating"];
 
