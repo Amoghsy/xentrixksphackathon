@@ -6,6 +6,9 @@ import { generateDashboard } from "@/mocks/dashboard";
 import { generateHotspots } from "@/mocks/hotspots";
 import { ALERTS } from "@/mocks/alerts";
 import { AUDIT_ROWS } from "@/mocks/audit";
+import { generateSociological } from "@/mocks/sociological";
+import { generateFinancialNetwork } from "@/mocks/financial";
+import { generateForecast, forecastCommentary, type ForecastCrime } from "@/mocks/forecast";
 import { latency } from "@/mocks/rng";
 
 // ============================== CASES ==============================
