@@ -20,6 +20,7 @@ export function Topbar() {
   const logout = useAuthStore((s) => s.logout);
   const { lang, setLang, theme, toggleTheme } = usePrefs();
   const navigate = useNavigate();
+  const t = useT();
 
   const initials = user?.name.split(" ").map((n) => n[0]).slice(-2).join("") ?? "?";
 
@@ -36,7 +37,7 @@ export function Topbar() {
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           type="text"
-          placeholder="Search cases, FIRs, offenders, districts…"
+          placeholder={t("search")}
           className="w-full h-9 rounded-md border border-input bg-background pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
         />
       </div>
