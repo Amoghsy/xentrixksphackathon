@@ -16,6 +16,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { PageHeader, StatCard } from "@/components/app/primitives";
+import { MockBadge } from "@/components/app/mock-badge";
 import { getDashboard, getAlerts } from "@/services/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +45,7 @@ function DashboardPage() {
       <PageHeader
         title="Analytics Dashboard"
         subtitle={`Aggregate view of statewide crime data · as of ${format(new Date(), "d MMM yyyy")}`}
+        actions={<MockBadge />}
       />
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">

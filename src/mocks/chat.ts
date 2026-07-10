@@ -17,6 +17,13 @@ export interface RichData {
   chartData?: { label: string; value: number }[];
 }
 
+export type AgentKind =
+  | "Query Agent"
+  | "Network Agent"
+  | "Pattern Agent"
+  | "Risk Agent"
+  | "Decision Support Agent";
+
 export interface ChatMessage {
   id: string;
   role: ChatRole;
@@ -24,6 +31,7 @@ export interface ChatMessage {
   data?: RichData;
   sql?: string;
   rows?: number;
+  agent?: AgentKind;
   ts: string;
 }
 

@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/settings")({
   head: () => ({ meta: [{ title: "Settings — Crime Intelligence Assistant" }] }),
@@ -88,9 +89,17 @@ function SettingsPage() {
         </section>
 
         <div>
-          <Button variant="outline" disabled>Save changes</Button>
+          <Button
+            onClick={() =>
+              toast.success("Preferences saved", {
+                description: "Language, theme and notification settings updated.",
+              })
+            }
+          >
+            Save changes
+          </Button>
           <span className="text-xs text-muted-foreground ml-3">
-            Preferences auto-save. Profile changes require Supervisor approval.
+            Profile changes require Supervisor approval.
           </span>
         </div>
       </div>

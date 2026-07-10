@@ -6,6 +6,9 @@ import { generateDashboard } from "@/mocks/dashboard";
 import { generateHotspots } from "@/mocks/hotspots";
 import { ALERTS } from "@/mocks/alerts";
 import { AUDIT_ROWS } from "@/mocks/audit";
+import { generateSociological } from "@/mocks/sociological";
+import { generateFinancialNetwork } from "@/mocks/financial";
+import { generateForecast, forecastCommentary, type ForecastCrime } from "@/mocks/forecast";
 import { latency } from "@/mocks/rng";
 
 // ============================== CASES ==============================
@@ -89,3 +92,23 @@ export async function getAudit() {
   await latency();
   return AUDIT_ROWS;
 }
+
+// ============================== SOCIOLOGICAL ==============================
+export async function getSociologicalInsights() {
+  await latency();
+  return generateSociological();
+}
+
+// ============================== FINANCIAL ==============================
+export async function getFinancialNetwork() {
+  await latency();
+  return generateFinancialNetwork();
+}
+
+// ============================== FORECAST ==============================
+export async function getForecast(crime: ForecastCrime) {
+  await latency();
+  const points = generateForecast(crime);
+  return { points, commentary: forecastCommentary(crime, points) };
+}
+export type { ForecastCrime };

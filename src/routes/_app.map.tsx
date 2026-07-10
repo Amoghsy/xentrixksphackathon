@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { PageHeader } from "@/components/app/primitives";
+import { MockBadge } from "@/components/app/mock-badge";
 import { getHotspots } from "@/services/api";
 import { DISTRICTS, CRIME_HEADS, GRAVITY } from "@/mocks/firs";
 import { KARNATAKA_PATH } from "@/mocks/karnataka-map";
@@ -42,6 +43,7 @@ function MapPage() {
         <PageHeader
           title="Crime Hotspot Map"
           subtitle="Heat clusters over Karnataka districts. Click a cluster for details."
+          actions={<MockBadge />}
         />
       </div>
 
