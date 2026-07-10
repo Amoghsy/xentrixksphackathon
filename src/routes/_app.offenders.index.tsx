@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { PageHeader } from "@/components/app/primitives";
+import { MockBadge } from "@/components/app/mock-badge";
 import { listOffenders } from "@/services/api";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,7 @@ function OffendersPage() {
       <PageHeader
         title="Offender Profiles"
         subtitle={`${data?.length ?? 0} offenders tracked · sorted by risk score`}
+        actions={<MockBadge />}
       />
       <div className="mb-4 max-w-md">
         <Input placeholder="Search by name…" value={q} onChange={(e) => setQ(e.target.value)} />
