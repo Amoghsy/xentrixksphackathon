@@ -16,6 +16,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { PageHeader, StatCard } from "@/components/app/primitives";
+import { MockBadge } from "@/components/app/mock-badge";
 import { getDashboard, getAlerts } from "@/services/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
