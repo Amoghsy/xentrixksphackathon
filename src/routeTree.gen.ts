@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppSociologicalRouteImport } from './routes/_app.sociological'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppNetworkRouteImport } from './routes/_app.network'
 import { Route as AppMapRouteImport } from './routes/_app.map'
+import { Route as AppFinancialRouteImport } from './routes/_app.financial'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppAuditRouteImport } from './routes/_app.audit'
 import { Route as AppAlertsRouteImport } from './routes/_app.alerts'
@@ -37,6 +39,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSociologicalRoute = AppSociologicalRouteImport.update({
+  id: '/sociological',
+  path: '/sociological',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -50,6 +57,11 @@ const AppNetworkRoute = AppNetworkRouteImport.update({
 const AppMapRoute = AppMapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinancialRoute = AppFinancialRouteImport.update({
+  id: '/financial',
+  path: '/financial',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
@@ -94,9 +106,11 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AppAlertsRoute
   '/audit': typeof AppAuditRoute
   '/dashboard': typeof AppDashboardRoute
+  '/financial': typeof AppFinancialRoute
   '/map': typeof AppMapRoute
   '/network': typeof AppNetworkRoute
   '/settings': typeof AppSettingsRoute
+  '/sociological': typeof AppSociologicalRoute
   '/cases/$firId': typeof AppCasesFirIdRoute
   '/offenders/$id': typeof AppOffendersIdRoute
   '/cases/': typeof AppCasesIndexRoute
@@ -107,9 +121,11 @@ export interface FileRoutesByTo {
   '/alerts': typeof AppAlertsRoute
   '/audit': typeof AppAuditRoute
   '/dashboard': typeof AppDashboardRoute
+  '/financial': typeof AppFinancialRoute
   '/map': typeof AppMapRoute
   '/network': typeof AppNetworkRoute
   '/settings': typeof AppSettingsRoute
+  '/sociological': typeof AppSociologicalRoute
   '/': typeof AppIndexRoute
   '/cases/$firId': typeof AppCasesFirIdRoute
   '/offenders/$id': typeof AppOffendersIdRoute
@@ -123,9 +139,11 @@ export interface FileRoutesById {
   '/_app/alerts': typeof AppAlertsRoute
   '/_app/audit': typeof AppAuditRoute
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/financial': typeof AppFinancialRoute
   '/_app/map': typeof AppMapRoute
   '/_app/network': typeof AppNetworkRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_app/sociological': typeof AppSociologicalRoute
   '/_app/': typeof AppIndexRoute
   '/_app/cases/$firId': typeof AppCasesFirIdRoute
   '/_app/offenders/$id': typeof AppOffendersIdRoute
@@ -140,9 +158,11 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/audit'
     | '/dashboard'
+    | '/financial'
     | '/map'
     | '/network'
     | '/settings'
+    | '/sociological'
     | '/cases/$firId'
     | '/offenders/$id'
     | '/cases/'
@@ -153,9 +173,11 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/audit'
     | '/dashboard'
+    | '/financial'
     | '/map'
     | '/network'
     | '/settings'
+    | '/sociological'
     | '/'
     | '/cases/$firId'
     | '/offenders/$id'
@@ -168,9 +190,11 @@ export interface FileRouteTypes {
     | '/_app/alerts'
     | '/_app/audit'
     | '/_app/dashboard'
+    | '/_app/financial'
     | '/_app/map'
     | '/_app/network'
     | '/_app/settings'
+    | '/_app/sociological'
     | '/_app/'
     | '/_app/cases/$firId'
     | '/_app/offenders/$id'
@@ -206,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/sociological': {
+      id: '/_app/sociological'
+      path: '/sociological'
+      fullPath: '/sociological'
+      preLoaderRoute: typeof AppSociologicalRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -225,6 +256,13 @@ declare module '@tanstack/react-router' {
       path: '/map'
       fullPath: '/map'
       preLoaderRoute: typeof AppMapRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/financial': {
+      id: '/_app/financial'
+      path: '/financial'
+      fullPath: '/financial'
+      preLoaderRoute: typeof AppFinancialRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/dashboard': {
@@ -283,9 +321,11 @@ interface AppRouteChildren {
   AppAlertsRoute: typeof AppAlertsRoute
   AppAuditRoute: typeof AppAuditRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppFinancialRoute: typeof AppFinancialRoute
   AppMapRoute: typeof AppMapRoute
   AppNetworkRoute: typeof AppNetworkRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppSociologicalRoute: typeof AppSociologicalRoute
   AppIndexRoute: typeof AppIndexRoute
   AppCasesFirIdRoute: typeof AppCasesFirIdRoute
   AppOffendersIdRoute: typeof AppOffendersIdRoute
@@ -297,9 +337,11 @@ const AppRouteChildren: AppRouteChildren = {
   AppAlertsRoute: AppAlertsRoute,
   AppAuditRoute: AppAuditRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppFinancialRoute: AppFinancialRoute,
   AppMapRoute: AppMapRoute,
   AppNetworkRoute: AppNetworkRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppSociologicalRoute: AppSociologicalRoute,
   AppIndexRoute: AppIndexRoute,
   AppCasesFirIdRoute: AppCasesFirIdRoute,
   AppOffendersIdRoute: AppOffendersIdRoute,

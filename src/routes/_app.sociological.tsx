@@ -165,11 +165,7 @@ function SociologicalPage() {
                     border: "1px solid var(--color-border)",
                     background: "var(--color-card)",
                   }}
-                  formatter={(v: number | string, name: string, entry) => {
-                    if (name === "sei" || name === "crimeRate") return [v, name];
-                    return [v, name];
-                  }}
-                  labelFormatter={(_, payload) =>
+                  labelFormatter={(_: unknown, payload) =>
                     payload?.[0]?.payload?.district ?? ""
                   }
                 />
