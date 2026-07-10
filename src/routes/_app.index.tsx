@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { format } from "date-fns";
 import {
   Send,
@@ -11,6 +11,7 @@ import {
   FileDown,
   Bot,
   User as UserIcon,
+  X,
 } from "lucide-react";
 import {
   BarChart,
@@ -23,11 +24,21 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import jsPDF from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { SEED_SESSION, HISTORY_SESSIONS, type ChatMessage, type RichData } from "@/mocks/chat";
-import { askAssistant } from "@/services/assistant";
+import { MockBadge } from "@/components/app/mock-badge";
+import { useT } from "@/lib/i18n";
+import {
+  SEED_SESSION,
+  HISTORY_SESSIONS,
+  type ChatMessage,
+  type RichData,
+  type AgentKind,
+} from "@/mocks/chat";
+import { askAssistant, detectContextRef, extractAccusedId } from "@/services/assistant";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/")({
@@ -37,22 +48,36 @@ export const Route = createFileRoute("/_app/")({
   component: ChatPage,
 });
 
-const SUGGESTIONS = [
-  "Show robbery cases in Bengaluru last 6 months",
-  "Which accused have 3+ FIRs?",
-  "Show network around Accused A12",
-  "Crime trend for cybercrime this year",
-  "Total open cases this month?",
-];
+const AGENT_COLORS: Record<AgentKind, string> = {
+  "Query Agent": "bg-info/15 text-info border-info/30",
+  "Network Agent": "bg-primary/15 text-primary border-primary/30",
+  "Pattern Agent": "bg-chart-2/20 text-chart-2 border-chart-2/30",
+  "Risk Agent": "bg-destructive/10 text-destructive border-destructive/30",
+  "Decision Support Agent": "bg-warning/15 text-warning-foreground border-warning/40",
+};
+
+// Feature-detect SpeechRecognition
+function getSpeechRecognition(): any | null {
+  if (typeof window === "undefined") return null;
+  return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
+}
 
 function ChatPage() {
+  const t = useT();
   const [messages, setMessages] = useState<ChatMessage[]>(SEED_SESSION.messages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [micOn, setMicOn] = useState(false);
+  const [listening, setListening] = useState(false);
+  const [contextEntity, setContextEntity] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  const SR = useMemo(() => getSpeechRecognition(), []);
+  const speechSupported = !!SR;
+
+  const SUGGESTIONS = [t("s1"), t("s2"), t("s3"), t("s4"), t("s5")];
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -61,6 +86,56 @@ function ChatPage() {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Detect if the input references a prior entity → show context chip
+  useEffect(() => {
+    if (!input.trim()) return;
+    if (!detectContextRef(input)) return;
+    // find last assistant message that mentions an accused id
+    for (let i = messages.length - 1; i >= 0; i--) {
+      const m = messages[i];
+      if (m.role !== "assistant") continue;
+      const id = extractAccusedId(m.text) || (m.sql && extractAccusedId(m.sql));
+      if (id) {
+        setContextEntity(`Accused ${id}`);
+        break;
+      }
+    }
+  }, [input, messages]);
+
+  function stopListening() {
+    try {
+      recognitionRef.current?.stop();
+    } catch {}
+    setListening(false);
+  }
+
+  function startListening() {
+    if (!SR) return;
+    const rec = new SR();
+    rec.lang = "en-US";
+    rec.interimResults = true;
+    rec.continuous = false;
+    rec.onresult = (ev: any) => {
+      let finalText = "";
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        finalText += ev.results[i][0].transcript;
+      }
+      setInput((prev) => (prev ? prev.trimEnd() + " " : "") + finalText.trim());
+    };
+    rec.onerror = (ev: any) => {
+      toast.error("Voice input error", { description: ev.error ?? "Unknown error" });
+      setListening(false);
+    };
+    rec.onend = () => setListening(false);
+    recognitionRef.current = rec;
+    setListening(true);
+    try {
+      rec.start();
+    } catch (e) {
+      setListening(false);
+    }
+  }
 
   async function send(text: string) {
     const q = text.trim();
@@ -83,6 +158,79 @@ function ChatPage() {
     }
   }
 
+  function exportPdf() {
+    const doc = new jsPDF({ unit: "pt", format: "a4" });
+    const marginX = 40;
+    let y = 50;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const usable = pageWidth - marginX * 2;
+
+    const addLine = (text: string, opts?: { size?: number; bold?: boolean; color?: [number, number, number] }) => {
+      const size = opts?.size ?? 10;
+      doc.setFont("helvetica", opts?.bold ? "bold" : "normal");
+      doc.setFontSize(size);
+      const [r, g, b] = opts?.color ?? [30, 30, 30];
+      doc.setTextColor(r, g, b);
+      const lines = doc.splitTextToSize(text, usable);
+      for (const line of lines) {
+        if (y > pageHeight - 50) {
+          doc.addPage();
+          y = 50;
+        }
+        doc.text(line, marginX, y);
+        y += size + 3;
+      }
+    };
+
+    addLine(SEED_SESSION.title, { size: 16, bold: true });
+    addLine(`Exported ${format(new Date(), "d MMM yyyy · HH:mm")}`, {
+      size: 9,
+      color: [110, 110, 110],
+    });
+    y += 8;
+    doc.setDrawColor(200);
+    doc.line(marginX, y, pageWidth - marginX, y);
+    y += 14;
+
+    for (const m of messages) {
+      const who = m.role === "user" ? "User" : `Assistant${m.agent ? " · " + m.agent : ""}`;
+      addLine(`${who}  ·  ${format(new Date(m.ts), "d MMM · HH:mm")}`, {
+        size: 9,
+        bold: true,
+        color: m.role === "user" ? [40, 60, 120] : [70, 90, 60],
+      });
+      addLine(m.text, { size: 11 });
+      if (m.sql) {
+        y += 4;
+        addLine("SQL:", { size: 9, bold: true, color: [90, 90, 90] });
+        doc.setFont("courier", "normal");
+        doc.setFontSize(9);
+        doc.setTextColor(60, 60, 60);
+        const sqlLines = doc.splitTextToSize(m.sql, usable);
+        for (const line of sqlLines) {
+          if (y > pageHeight - 50) {
+            doc.addPage();
+            y = 50;
+          }
+          doc.text(line, marginX, y);
+          y += 11;
+        }
+        if (m.rows !== undefined) {
+          addLine(`(${m.rows} row${m.rows === 1 ? "" : "s"})`, {
+            size: 9,
+            color: [130, 130, 130],
+          });
+        }
+      }
+      y += 10;
+    }
+
+    const filename = `chat-${format(new Date(), "yyyyMMdd-HHmm")}.pdf`;
+    doc.save(filename);
+    toast.success("PDF downloaded", { description: filename });
+  }
+
   return (
     <div className="flex h-full">
       {/* Main chat column */}
@@ -91,14 +239,13 @@ function ChatPage() {
           <div>
             <div className="flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-primary" />
-              <h1 className="text-sm font-semibold">Chat Assistant</h1>
+              <h1 className="text-sm font-semibold">{t("chatTitle")}</h1>
               <Badge variant="secondary" className="text-[10px] font-medium">
-                Explainable NL → SQL
+                {t("chatBadge")}
               </Badge>
+              <MockBadge />
             </div>
-            <div className="text-xs text-muted-foreground mt-0.5">
-              Natural-language queries against the Karnataka SCRB crime records database.
-            </div>
+            <div className="text-xs text-muted-foreground mt-0.5">{t("chatSubtitle")}</div>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -107,18 +254,10 @@ function ChatPage() {
               onClick={() => setHistoryOpen((v) => !v)}
               className="gap-1.5"
             >
-              <History className="h-3.5 w-3.5" /> History
+              <History className="h-3.5 w-3.5" /> {t("history")}
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                toast.success("Export prepared", { description: "Print dialog opened for PDF export." });
-                setTimeout(() => window.print(), 200);
-              }}
-              className="gap-1.5"
-            >
-              <FileDown className="h-3.5 w-3.5" /> Export PDF
+            <Button variant="outline" size="sm" onClick={exportPdf} className="gap-1.5">
+              <FileDown className="h-3.5 w-3.5" /> {t("exportPdf")}
             </Button>
           </div>
         </div>
@@ -129,12 +268,28 @@ function ChatPage() {
           ))}
           {loading && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground animate-pulse">
-              <Bot className="h-4 w-4" /> Assistant is analysing the request…
+              <Bot className="h-4 w-4" /> {t("analysing")}
             </div>
           )}
         </div>
 
         <div className="border-t border-border bg-card px-5 py-3">
+          {contextEntity && (
+            <div className="mb-2 flex items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-primary">
+                <span className="font-medium">Context:</span>
+                <span>{contextEntity}</span>
+                <button
+                  onClick={() => setContextEntity(null)}
+                  className="ml-1 rounded-full hover:bg-primary/20 p-0.5"
+                  aria-label="Clear context"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+              <span className="text-[11px] text-muted-foreground">Click × to clear</span>
+            </div>
+          )}
           <div className="flex flex-wrap gap-1.5 mb-2.5">
             {SUGGESTIONS.map((s) => (
               <button
@@ -159,41 +314,63 @@ function ChatPage() {
                   }
                 }}
                 rows={2}
-                placeholder="Ask about FIRs, offenders, districts, or trends…"
+                placeholder={t("askPlaceholder")}
                 className="w-full resize-none rounded-md border border-input bg-background px-3 py-2 pr-24 text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
               />
               <div className="absolute right-2 bottom-2 flex items-center gap-1">
-                <button
-                  onClick={() => setMicOn((v) => !v)}
-                  className={cn(
-                    "h-8 w-8 rounded flex items-center justify-center hover:bg-accent",
-                    micOn && "bg-destructive/10 text-destructive",
-                  )}
-                  title="Voice input (mock)"
-                >
-                  <Mic className="h-4 w-4" />
-                </button>
+                <TooltipProvider delayDuration={200}>
+                  <UITooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={() => {
+                          if (!speechSupported) return;
+                          listening ? stopListening() : startListening();
+                        }}
+                        disabled={!speechSupported}
+                        className={cn(
+                          "h-8 w-8 rounded flex items-center justify-center hover:bg-accent relative",
+                          !speechSupported && "opacity-40 cursor-not-allowed",
+                          listening && "bg-destructive/10 text-destructive",
+                        )}
+                      >
+                        <Mic className="h-4 w-4" />
+                        {listening && (
+                          <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-destructive animate-pulse ring-2 ring-card" />
+                        )}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" className="text-xs">
+                      {speechSupported
+                        ? listening
+                          ? "Stop listening"
+                          : "Start voice input"
+                        : t("voiceUnsupported")}
+                    </TooltipContent>
+                  </UITooltip>
+                </TooltipProvider>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-muted text-muted-foreground uppercase tracking-wider">
                   EN
                 </span>
               </div>
             </div>
             <Button onClick={() => send(input)} disabled={loading || !input.trim()} className="h-11 px-4">
-              <Send className="h-4 w-4 mr-1.5" /> Send
+              <Send className="h-4 w-4 mr-1.5" /> {t("send")}
             </Button>
           </div>
           <div className="text-[11px] text-muted-foreground mt-2">
-            Responses include the generated SQL and row count for explainability. Every query is audited.
+            {t("explainabilityNote")}
+          </div>
+          <div className="text-[11px] text-muted-foreground/80 italic mt-1">
+            {t("translationNote")}
           </div>
         </div>
       </div>
 
-      {/* History drawer */}
       {historyOpen && (
         <aside className="w-72 border-l border-border bg-card overflow-y-auto scrollbar-thin animate-in slide-in-from-right duration-200">
           <div className="px-4 py-3 border-b border-border">
             <div className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-              Conversation history
+              {t("historyTitle")}
             </div>
           </div>
           <ul className="p-2 space-y-1">
@@ -215,6 +392,7 @@ function ChatPage() {
 }
 
 function MessageRow({ m }: { m: ChatMessage }) {
+  const t = useT();
   const [showSql, setShowSql] = useState(false);
   const isUser = m.role === "user";
 
@@ -226,6 +404,16 @@ function MessageRow({ m }: { m: ChatMessage }) {
         </div>
       )}
       <div className={cn("max-w-[80%] min-w-0", isUser && "order-1")}>
+        {!isUser && m.agent && (
+          <div className="mb-1">
+            <Badge
+              variant="outline"
+              className={cn("text-[10px] font-medium border", AGENT_COLORS[m.agent])}
+            >
+              {m.agent}
+            </Badge>
+          </div>
+        )}
         <div
           className={cn(
             "rounded-md px-4 py-3 text-sm",
@@ -255,7 +443,7 @@ function MessageRow({ m }: { m: ChatMessage }) {
               className="inline-flex items-center gap-0.5 hover:text-foreground"
             >
               {showSql ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
-              Show reasoning · {m.rows} row{m.rows === 1 ? "" : "s"}
+              {t("showReasoning")} · {m.rows} row{m.rows === 1 ? "" : "s"}
             </button>
           )}
         </div>
@@ -328,7 +516,6 @@ function RichCard({ data }: { data: RichData }) {
     );
   }
 
-  // chart
   const Comp = data.chartKind === "line" ? LineChart : BarChart;
   return (
     <div className="rounded border border-border bg-background p-3 text-foreground">
