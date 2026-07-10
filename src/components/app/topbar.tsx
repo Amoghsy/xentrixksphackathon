@@ -105,7 +105,7 @@ export function Topbar() {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => navigate({ to: "/settings" })}>
-              Settings
+              {t("settings")}
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
@@ -114,7 +114,7 @@ export function Topbar() {
               }}
               className="text-destructive focus:text-destructive"
             >
-              <LogOut className="h-4 w-4 mr-2" /> Sign out
+              <LogOut className="h-4 w-4 mr-2" /> {t("signOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
