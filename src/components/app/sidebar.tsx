@@ -3,7 +3,9 @@ import {
   MessageSquare,
   LayoutDashboard,
   Network,
+  Wallet,
   Map,
+  PieChart,
   FileSearch,
   Users,
   AlertTriangle,
@@ -14,31 +16,35 @@ import {
 } from "lucide-react";
 import { useAuthStore, type Role } from "@/stores/auth";
 import { usePrefs } from "@/stores/prefs";
+import { useT, type DictKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 interface NavItem {
   to: string;
-  label: string;
+  labelKey: DictKey;
   icon: React.ComponentType<{ className?: string }>;
-  roles?: Role[]; // undefined = all
+  roles?: Role[];
 }
 
 const NAV: NavItem[] = [
-  { to: "/", label: "Chat Assistant", icon: MessageSquare },
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/network", label: "Criminal Network", icon: Network, roles: ["Investigator", "Analyst", "Supervisor"] },
-  { to: "/map", label: "Crime Map", icon: Map },
-  { to: "/cases", label: "Case Search", icon: FileSearch, roles: ["Investigator", "Analyst", "Supervisor"] },
-  { to: "/offenders", label: "Offender Profiles", icon: Users, roles: ["Investigator", "Analyst", "Supervisor"] },
-  { to: "/alerts", label: "Alerts", icon: AlertTriangle },
-  { to: "/audit", label: "Audit Log", icon: ClipboardList, roles: ["Supervisor"] },
-  { to: "/settings", label: "Settings", icon: SettingsIcon },
+  { to: "/", labelKey: "chat", icon: MessageSquare },
+  { to: "/dashboard", labelKey: "dashboard", icon: LayoutDashboard },
+  { to: "/network", labelKey: "network", icon: Network, roles: ["Investigator", "Analyst", "Supervisor"] },
+  { to: "/financial", labelKey: "financial", icon: Wallet, roles: ["Investigator", "Analyst", "Supervisor"] },
+  { to: "/map", labelKey: "map", icon: Map },
+  { to: "/sociological", labelKey: "sociological", icon: PieChart },
+  { to: "/cases", labelKey: "cases", icon: FileSearch, roles: ["Investigator", "Analyst", "Supervisor"] },
+  { to: "/offenders", labelKey: "offenders", icon: Users, roles: ["Investigator", "Analyst", "Supervisor"] },
+  { to: "/alerts", labelKey: "alerts", icon: AlertTriangle },
+  { to: "/audit", labelKey: "audit", icon: ClipboardList, roles: ["Supervisor"] },
+  { to: "/settings", labelKey: "settings", icon: SettingsIcon },
 ];
 
 export function Sidebar() {
   const role = useAuthStore((s) => s.user?.role);
   const { sidebarCollapsed, toggleSidebar } = usePrefs();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const t = useT();
 
   const items = NAV.filter((n) => !n.roles || (role && n.roles.includes(role)));
 
@@ -56,9 +62,9 @@ export function Sidebar() {
         {!sidebarCollapsed && (
           <div className="min-w-0">
             <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">
-              Karnataka SCRB
+              {t("brandLine1")}
             </div>
-            <div className="text-sm font-semibold truncate">Crime Intelligence</div>
+            <div className="text-sm font-semibold truncate">{t("brandLine2")}</div>
           </div>
         )}
       </div>
@@ -71,6 +77,7 @@ export function Sidebar() {
                 ? pathname === "/"
                 : pathname === item.to || pathname.startsWith(item.to + "/");
             const Icon = item.icon;
+            const label = t(item.labelKey);
             return (
               <li key={item.to}>
                 <Link
@@ -81,10 +88,10 @@ export function Sidebar() {
                       ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
                       : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
                   )}
-                  title={sidebarCollapsed ? item.label : undefined}
+                  title={sidebarCollapsed ? label : undefined}
                 >
                   <Icon className="h-4 w-4 shrink-0" />
-                  {!sidebarCollapsed && <span className="truncate">{item.label}</span>}
+                  {!sidebarCollapsed && <span className="truncate">{label}</span>}
                 </Link>
               </li>
             );
@@ -97,7 +104,7 @@ export function Sidebar() {
         className="flex items-center justify-center gap-2 border-t border-sidebar-border py-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
       >
         <ChevronLeft className={cn("h-4 w-4 transition-transform", sidebarCollapsed && "rotate-180")} />
-        {!sidebarCollapsed && <span>Collapse</span>}
+        {!sidebarCollapsed && <span>{t("collapse")}</span>}
       </button>
     </aside>
   );
