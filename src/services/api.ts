@@ -92,3 +92,23 @@ export async function getAudit() {
   await latency();
   return AUDIT_ROWS;
 }
+
+// ============================== SOCIOLOGICAL ==============================
+export async function getSociologicalInsights() {
+  await latency();
+  return generateSociological();
+}
+
+// ============================== FINANCIAL ==============================
+export async function getFinancialNetwork() {
+  await latency();
+  return generateFinancialNetwork();
+}
+
+// ============================== FORECAST ==============================
+export async function getForecast(crime: ForecastCrime) {
+  await latency();
+  const points = generateForecast(crime);
+  return { points, commentary: forecastCommentary(crime, points) };
+}
+export type { ForecastCrime };
