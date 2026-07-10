@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "@/components/app/primitives";
+import { MockBadge } from "@/components/app/mock-badge";
 import { getNetwork } from "@/services/api";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -49,6 +50,7 @@ function NetworkPage() {
           subtitle="Interactive graph of accused, victims, locations and linked cases."
           actions={
             <div className="flex items-center gap-2">
+              <MockBadge />
               <Input
                 placeholder="Search node ID or label…"
                 value={q}
