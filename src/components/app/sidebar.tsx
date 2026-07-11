@@ -101,7 +101,7 @@ export function Sidebar() {
 
       <button
         onClick={toggleSidebar}
-        className="flex items-center justify-center gap-2 border-t border-sidebar-border py-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
+        className="flex items-center justify-center gap-2 border-t border-white/10 py-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
       >
         <ChevronLeft className={cn("h-4 w-4 transition-transform", sidebarCollapsed && "rotate-180")} />
         {!sidebarCollapsed && <span>{t("collapse")}</span>}
