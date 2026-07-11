@@ -32,7 +32,7 @@ export function Topbar() {
   };
 
   return (
-    <header className="flex items-center gap-3 border-b border-border bg-card px-4 h-14 shrink-0">
+    <header className="flex items-center gap-3 border-b border-white/10 bg-background/80 backdrop-blur-xl px-4 h-14 shrink-0 relative z-20">
       <div className="relative flex-1 max-w-xl">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
