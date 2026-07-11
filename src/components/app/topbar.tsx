@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 export function Topbar() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-  const { lang, setLang, theme, toggleTheme } = usePrefs();
+  const { lang, setLang } = usePrefs();
   const navigate = useNavigate();
   const t = useT();
 
