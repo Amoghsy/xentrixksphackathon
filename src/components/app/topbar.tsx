@@ -64,13 +64,6 @@ export function Topbar() {
           </button>
         </div>
 
-        <button
-          onClick={toggleTheme}
-          className="h-9 w-9 rounded-md hover:bg-accent flex items-center justify-center"
-          title={theme === "light" ? "Switch to dark" : "Switch to light"}
-        >
-          {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
-        </button>
 
         <button className="relative h-9 w-9 rounded-md hover:bg-accent flex items-center justify-center">
           <Bell className="h-4 w-4" />
