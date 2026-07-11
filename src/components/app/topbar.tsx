@@ -67,8 +67,8 @@ export function Topbar() {
 
         <button className="relative h-9 w-9 rounded-md hover:bg-accent flex items-center justify-center">
           <Bell className="h-4 w-4" />
-          <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center px-1">
-            3
+          <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-destructive text-[10px] font-medium flex items-center justify-center px-1 glow-current">
+            <span className="text-destructive-foreground">3</span>
           </span>
         </button>
 
