@@ -197,7 +197,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-md border border-border bg-card p-4">
+    <div className="glass-panel rounded-xl p-4">
       <div className="mb-3">
         <div className="text-sm font-semibold">{title}</div>
         {caption && <div className="text-[11px] text-muted-foreground">{caption}</div>}

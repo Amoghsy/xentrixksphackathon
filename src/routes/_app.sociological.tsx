@@ -39,7 +39,7 @@ const CHART_COLORS = [
 
 function Panel({ title, caption, children }: { title: string; caption?: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-md border border-border bg-card p-4">
+    <div className="glass-panel rounded-xl p-4">
       <div className="mb-3">
         <div className="text-sm font-semibold">{title}</div>
         {caption && <div className="text-[11px] text-muted-foreground">{caption}</div>}
@@ -184,7 +184,7 @@ function SociologicalPage() {
           : data.callouts.map((c) => (
               <div
                 key={c.title}
-                className="rounded-md border border-border bg-card p-4 border-l-2 border-l-primary"
+                className="glass-panel rounded-xl p-4 border-l-2 border-l-primary"
               >
                 <div className="text-sm font-semibold">{c.title}</div>
                 <div className="text-xs text-muted-foreground mt-1 leading-relaxed">{c.detail}</div>

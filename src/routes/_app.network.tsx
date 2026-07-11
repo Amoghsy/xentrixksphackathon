@@ -111,7 +111,7 @@ function NetworkPage() {
         )}
 
         {/* Legend */}
-        <div className="absolute bottom-4 left-4 rounded-md border border-border bg-card/95 backdrop-blur p-3 text-xs shadow-sm">
+        <div className="absolute bottom-4 left-4 glass-panel rounded-xl/95 backdrop-blur p-3 text-xs shadow-sm">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 font-medium">
             Legend
           </div>
@@ -137,7 +137,7 @@ function NetworkPage() {
 
         {/* Side panel */}
         {selected && (
-          <aside className="absolute top-4 right-4 w-72 rounded-md border border-border bg-card shadow-lg p-4 animate-in slide-in-from-right duration-200">
+          <aside className="absolute top-4 right-4 w-72 glass-panel rounded-xl shadow-lg p-4 animate-in slide-in-from-right duration-200">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
