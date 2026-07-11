@@ -44,7 +44,7 @@ function OffenderDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-md border border-border bg-card p-4">
+          <div className="glass-panel rounded-xl p-4">
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-3">
               Risk score breakdown
             </div>
@@ -66,7 +66,7 @@ function OffenderDetailPage() {
             </div>
           </div>
 
-          <div className="rounded-md border border-border bg-card p-4">
+          <div className="glass-panel rounded-xl p-4">
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-3">
               Modus operandi
             </div>
@@ -77,7 +77,7 @@ function OffenderDetailPage() {
             </div>
           </div>
 
-          <div className="rounded-md border border-border bg-card p-4">
+          <div className="glass-panel rounded-xl p-4">
             <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-3">
               Linked case history
             </div>
@@ -92,7 +92,7 @@ function OffenderDetailPage() {
           </div>
         </div>
 
-        <div className="rounded-md border border-border bg-card p-4">
+        <div className="glass-panel rounded-xl p-4">
           <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-3">
             Similar offenders
           </div>
