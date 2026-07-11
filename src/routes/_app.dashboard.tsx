@@ -41,7 +41,7 @@ function DashboardPage() {
   const { data: alerts } = useQuery({ queryKey: ["alerts"], queryFn: getAlerts });
 
   return (
-    <div className="p-6 max-w-[1600px] mx-auto">
+    <div className="bg-grid-pattern min-h-full"><div className="p-6 max-w-[1600px] mx-auto">
       <PageHeader
         title="Analytics Dashboard"
         subtitle={`Aggregate view of statewide crime data · as of ${format(new Date(), "d MMM yyyy")}`}
