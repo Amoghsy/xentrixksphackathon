@@ -43,7 +43,7 @@ function NetworkPage() {
   }, []);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-grid-pattern">
       <div className="px-6 pt-6">
         <PageHeader
           title="Criminal Network"
