@@ -55,7 +55,7 @@ export function Sidebar() {
         sidebarCollapsed ? "w-16" : "w-64",
       )}
     >
-      <div className="flex items-center gap-2 px-4 py-4 border-b border-sidebar-border">
+      <div className="flex items-center gap-2 px-4 py-4 border-b border-white/10">
         <div className="flex h-9 w-9 items-center justify-center rounded bg-sidebar-primary text-sidebar-primary-foreground shrink-0">
           <Shield className="h-5 w-5" />
         </div>
