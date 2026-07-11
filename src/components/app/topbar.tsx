@@ -1,4 +1,4 @@
-import { Bell, Search, Sun, Moon, LogOut } from "lucide-react";
+import { Bell, Search, LogOut } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@/stores/auth";
 import { usePrefs } from "@/stores/prefs";
