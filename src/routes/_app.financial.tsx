@@ -140,7 +140,7 @@ function FinancialPage() {
         )}
 
         {/* Legend */}
-        <div className="absolute bottom-4 left-4 glass-panel rounded-xl/95 backdrop-blur p-3 text-xs shadow-sm">
+        <div className="absolute bottom-4 left-4 glass-panel rounded-xl p-3 text-xs shadow-sm">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1.5 font-medium">
             Legend
           </div>
