@@ -67,7 +67,7 @@ function AlertsPage() {
         }
       />
 
-      <div className="glass-panel rounded-xl p-4 mb-5">
+      <div className="rounded-md border border-border bg-card p-4 mb-5">
         <div className="flex items-start justify-between gap-4 mb-3">
           <div>
             <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ function AlertsPage() {
             <li
               key={a.id}
               className={cn(
-                "glass-panel rounded-xl border-l-4 p-4 hover:shadow-sm transition-shadow",
+                "rounded-md border border-border bg-card border-l-4 p-4 hover:shadow-sm transition-shadow",
                 color,
               )}
             >

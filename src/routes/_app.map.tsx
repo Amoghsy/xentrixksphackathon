@@ -49,7 +49,7 @@ function MapPage() {
 
       <div className="flex flex-1 gap-4 px-6 pb-6 min-h-0">
         {/* Filters */}
-        <aside className="w-64 shrink-0 glass-panel rounded-xl p-4 space-y-4 self-start">
+        <aside className="w-64 shrink-0 rounded-md border border-border bg-card p-4 space-y-4 self-start">
           <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
             Filters
           </div>
@@ -110,7 +110,7 @@ function MapPage() {
         </aside>
 
         {/* Map canvas */}
-        <div className="flex-1 relative glass-panel rounded-xl overflow-hidden min-h-[500px]">
+        <div className="flex-1 relative rounded-md border border-border bg-card overflow-hidden min-h-[500px]">
           {isLoading || !data ? (
             <Skeleton className="absolute inset-4" />
           ) : (
@@ -152,7 +152,7 @@ function MapPage() {
           )}
 
           {sel && (
-            <div className="absolute top-4 right-4 w-64 glass-panel rounded-xl shadow-lg p-3 animate-in fade-in duration-200">
+            <div className="absolute top-4 right-4 w-64 rounded-md border border-border bg-card shadow-lg p-3 animate-in fade-in duration-200">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
                 {sel.district}
               </div>

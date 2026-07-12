@@ -49,7 +49,7 @@ function OffendersPage() {
             key={o.id}
             to="/offenders/$id"
             params={{ id: o.id }}
-            className="glass-panel rounded-xl p-4 hover:shadow-sm hover:border-primary/50 transition-all"
+            className="rounded-md border border-border bg-card p-4 hover:shadow-sm hover:border-primary/50 transition-all"
           >
             <div className="flex items-start gap-3">
               <div className="h-11 w-11 rounded-full bg-muted flex items-center justify-center shrink-0">

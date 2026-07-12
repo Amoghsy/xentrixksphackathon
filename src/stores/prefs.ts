@@ -18,11 +18,11 @@ export const usePrefs = create<PrefsState>()(
   persist(
     (set, get) => ({
       lang: "en",
-      theme: "dark",
+      theme: "light",
       sidebarCollapsed: false,
       setLang: (lang) => set({ lang }),
-      setTheme: () => set({ theme: "dark" }),
-      toggleTheme: () => set({ theme: "dark" }),
+      setTheme: (theme) => set({ theme }),
+      toggleTheme: () => set({ theme: get().theme === "light" ? "dark" : "light" }),
       toggleSidebar: () => set({ sidebarCollapsed: !get().sidebarCollapsed }),
     }),
     { name: "cia-prefs" },

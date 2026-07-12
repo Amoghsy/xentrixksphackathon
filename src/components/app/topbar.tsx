@@ -1,4 +1,4 @@
-import { Bell, Search, LogOut } from "lucide-react";
+import { Bell, Search, Sun, Moon, LogOut } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useAuthStore } from "@/stores/auth";
 import { usePrefs } from "@/stores/prefs";
@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 export function Topbar() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-  const { lang, setLang } = usePrefs();
+  const { lang, setLang, theme, toggleTheme } = usePrefs();
   const navigate = useNavigate();
   const t = useT();
 
@@ -32,7 +32,7 @@ export function Topbar() {
   };
 
   return (
-    <header className="flex items-center gap-3 border-b border-white/10 bg-background/80 backdrop-blur-xl px-4 h-14 shrink-0 relative z-20">
+    <header className="flex items-center gap-3 border-b border-border bg-card px-4 h-14 shrink-0">
       <div className="relative flex-1 max-w-xl">
         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
@@ -64,11 +64,18 @@ export function Topbar() {
           </button>
         </div>
 
+        <button
+          onClick={toggleTheme}
+          className="h-9 w-9 rounded-md hover:bg-accent flex items-center justify-center"
+          title={theme === "light" ? "Switch to dark" : "Switch to light"}
+        >
+          {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+        </button>
 
         <button className="relative h-9 w-9 rounded-md hover:bg-accent flex items-center justify-center">
           <Bell className="h-4 w-4" />
-          <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-destructive text-[10px] font-medium flex items-center justify-center px-1 glow-current">
-            <span className="text-destructive-foreground">3</span>
+          <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center px-1">
+            3
           </span>
         </button>
 

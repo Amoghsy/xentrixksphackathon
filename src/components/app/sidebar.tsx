@@ -51,11 +51,11 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        "flex h-screen flex-col bg-background/80 backdrop-blur-xl text-sidebar-foreground transition-[width] duration-200 border-r border-white/10 relative z-20",
+        "flex h-screen flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-200 border-r border-sidebar-border",
         sidebarCollapsed ? "w-16" : "w-64",
       )}
     >
-      <div className="flex items-center gap-2 px-4 py-4 border-b border-white/10">
+      <div className="flex items-center gap-2 px-4 py-4 border-b border-sidebar-border">
         <div className="flex h-9 w-9 items-center justify-center rounded bg-sidebar-primary text-sidebar-primary-foreground shrink-0">
           <Shield className="h-5 w-5" />
         </div>
@@ -101,7 +101,7 @@ export function Sidebar() {
 
       <button
         onClick={toggleSidebar}
-        className="flex items-center justify-center gap-2 border-t border-white/10 py-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
+        className="flex items-center justify-center gap-2 border-t border-sidebar-border py-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
       >
         <ChevronLeft className={cn("h-4 w-4 transition-transform", sidebarCollapsed && "rotate-180")} />
         {!sidebarCollapsed && <span>{t("collapse")}</span>}

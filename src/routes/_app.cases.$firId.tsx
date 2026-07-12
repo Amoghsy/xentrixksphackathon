@@ -172,7 +172,7 @@ function CaseDetailPage() {
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="glass-panel rounded-xl p-4">
+    <div className="rounded-md border border-border bg-card p-4">
       <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium mb-3">
         {title}
       </div>

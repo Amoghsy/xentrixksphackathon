@@ -41,7 +41,7 @@ function DashboardPage() {
   const { data: alerts } = useQuery({ queryKey: ["alerts"], queryFn: getAlerts });
 
   return (
-    <div className="bg-grid-pattern min-h-full"><div className="p-6 max-w-[1600px] mx-auto">
+    <div className="p-6 max-w-[1600px] mx-auto">
       <PageHeader
         title="Analytics Dashboard"
         subtitle={`Aggregate view of statewide crime data · as of ${format(new Date(), "d MMM yyyy")}`}
@@ -184,7 +184,6 @@ function DashboardPage() {
         </div>
       </div>
     </div>
-    </div>
   );
 }
 
@@ -198,7 +197,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <div className="glass-panel rounded-xl p-4">
+    <div className="rounded-md border border-border bg-card p-4">
       <div className="mb-3">
         <div className="text-sm font-semibold">{title}</div>
         {caption && <div className="text-[11px] text-muted-foreground">{caption}</div>}

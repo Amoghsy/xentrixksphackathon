@@ -56,7 +56,7 @@ export function StatCard({
 }) {
   const up = (delta ?? 0) >= 0;
   return (
-    <div className="glass-panel rounded-xl p-4">
+    <div className="rounded-md border border-border bg-card p-4">
       <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
         {label}
       </div>
