@@ -32,7 +32,7 @@ function AuditPage() {
         actions={<MockBadge />}
       />
 
-      <div className="rounded-md border border-border bg-card overflow-hidden">
+      <div className="rounded-xl glass overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead className="bg-muted/60 border-b border-border">
