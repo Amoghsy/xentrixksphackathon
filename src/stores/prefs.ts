@@ -8,10 +8,12 @@ interface PrefsState {
   lang: Lang;
   theme: Theme;
   sidebarCollapsed: boolean;
+  mobileNavOpen: boolean;
   setLang: (l: Lang) => void;
   setTheme: (t: Theme) => void;
   toggleTheme: () => void;
   toggleSidebar: () => void;
+  setMobileNavOpen: (open: boolean) => void;
 }
 
 export const usePrefs = create<PrefsState>()(
@@ -20,11 +22,20 @@ export const usePrefs = create<PrefsState>()(
       lang: "en",
       theme: "light",
       sidebarCollapsed: false,
+      mobileNavOpen: false,
       setLang: (lang) => set({ lang }),
       setTheme: (theme) => set({ theme }),
       toggleTheme: () => set({ theme: get().theme === "light" ? "dark" : "light" }),
       toggleSidebar: () => set({ sidebarCollapsed: !get().sidebarCollapsed }),
+      setMobileNavOpen: (mobileNavOpen) => set({ mobileNavOpen }),
     }),
-    { name: "cia-prefs" },
+    {
+      name: "cia-prefs",
+      partialize: (s) => ({
+        lang: s.lang,
+        theme: s.theme,
+        sidebarCollapsed: s.sidebarCollapsed,
+      }),
+    },
   ),
 );
