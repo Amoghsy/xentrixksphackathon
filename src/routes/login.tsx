@@ -73,7 +73,7 @@ function LoginPage() {
               login(username, role);
               navigate({ to: "/" });
             }}
-            className="rounded-lg bg-card text-card-foreground border border-border shadow-lg p-6 space-y-4"
+            className="rounded-2xl text-card-foreground p-6 space-y-4 glass-strong"
           >
             <div className="space-y-1.5">
               <Label htmlFor="u">Username / Badge No.</Label>
