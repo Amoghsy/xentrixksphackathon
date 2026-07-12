@@ -40,28 +40,53 @@ const NAV: NavItem[] = [
   { to: "/settings", labelKey: "settings", icon: SettingsIcon },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  forceExpanded?: boolean;
+  onNavigate?: () => void;
+}
+
+export function Sidebar({ forceExpanded, onNavigate }: SidebarProps = {}) {
   const role = useAuthStore((s) => s.user?.role);
   const { sidebarCollapsed, toggleSidebar } = usePrefs();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const t = useT();
 
+  const collapsed = forceExpanded ? false : sidebarCollapsed;
   const items = NAV.filter((n) => !n.roles || (role && n.roles.includes(role)));
 
   return (
     <aside
       className={cn(
-        "flex h-screen flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-200 border-r border-sidebar-border",
-        sidebarCollapsed ? "w-16" : "w-64",
+        "relative flex h-screen flex-col text-sidebar-foreground transition-[width] duration-300 border-r border-sidebar-border/60",
+        "bg-sidebar/85 backdrop-blur-2xl",
+        collapsed ? "w-16" : "w-64",
       )}
+      style={{
+        boxShadow: "0 20px 60px -20px oklch(0 0 0 / 0.5)",
+      }}
     >
-      <div className="flex items-center gap-2 px-4 py-4 border-b border-sidebar-border">
-        <div className="flex h-9 w-9 items-center justify-center rounded bg-sidebar-primary text-sidebar-primary-foreground shrink-0">
+      {/* subtle top accent line */}
+      <div
+        className="absolute inset-x-0 top-0 h-px"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, oklch(0.65 0.12 190 / 0.5), transparent)",
+        }}
+      />
+
+      <div className="flex items-center gap-2.5 px-4 py-4 border-b border-sidebar-border/60">
+        <div
+          className="flex h-9 w-9 items-center justify-center rounded-lg shrink-0 text-sidebar-primary-foreground"
+          style={{
+            background: "var(--gradient-teal)",
+            boxShadow: "0 4px 14px -4px oklch(0.65 0.12 190 / 0.5)",
+          }}
+        >
           <Shield className="h-5 w-5" />
         </div>
-        {!sidebarCollapsed && (
+        {!collapsed && (
           <div className="min-w-0">
-            <div className="text-[11px] uppercase tracking-widest text-sidebar-foreground/60">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-sidebar-foreground/60 font-medium">
               {t("brandLine1")}
             </div>
             <div className="text-sm font-semibold truncate">{t("brandLine2")}</div>
@@ -82,16 +107,31 @@ export function Sidebar() {
               <li key={item.to}>
                 <Link
                   to={item.to}
+                  onClick={onNavigate}
                   className={cn(
-                    "group flex items-center gap-3 rounded px-3 py-2 text-sm transition-colors",
+                    "group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all duration-200",
                     active
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                      : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+                      ? "bg-sidebar-accent/80 text-sidebar-accent-foreground font-medium"
+                      : "text-sidebar-foreground/75 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground hover:translate-x-0.5",
                   )}
-                  title={sidebarCollapsed ? label : undefined}
+                  title={collapsed ? label : undefined}
                 >
-                  <Icon className="h-4 w-4 shrink-0" />
-                  {!sidebarCollapsed && <span className="truncate">{label}</span>}
+                  {active && (
+                    <span
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-0.5 rounded-r"
+                      style={{
+                        background: "var(--color-sidebar-primary)",
+                        boxShadow: "0 0 12px 1px oklch(0.65 0.12 190 / 0.7)",
+                      }}
+                    />
+                  )}
+                  <Icon
+                    className={cn(
+                      "h-4 w-4 shrink-0 transition-colors",
+                      active && "text-sidebar-primary",
+                    )}
+                  />
+                  {!collapsed && <span className="truncate">{label}</span>}
                 </Link>
               </li>
             );
@@ -99,13 +139,15 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <button
-        onClick={toggleSidebar}
-        className="flex items-center justify-center gap-2 border-t border-sidebar-border py-2 text-xs text-sidebar-foreground/70 hover:text-sidebar-foreground"
-      >
-        <ChevronLeft className={cn("h-4 w-4 transition-transform", sidebarCollapsed && "rotate-180")} />
-        {!sidebarCollapsed && <span>{t("collapse")}</span>}
-      </button>
+      {!forceExpanded && (
+        <button
+          onClick={toggleSidebar}
+          className="hidden md:flex items-center justify-center gap-2 border-t border-sidebar-border/60 py-2.5 text-xs text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40 transition-colors"
+        >
+          <ChevronLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
+          {!collapsed && <span>{t("collapse")}</span>}
+        </button>
+      )}
     </aside>
   );
 }
