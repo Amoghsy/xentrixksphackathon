@@ -20,7 +20,7 @@ function SettingsPage() {
     <div className="p-6 max-w-3xl mx-auto">
       <PageHeader title="Settings" subtitle="Profile, language and notification preferences." />
       <div className="space-y-6">
-        <section className="rounded-md border border-border bg-card p-5">
+        <section className="rounded-xl glass p-5">
           <h2 className="text-sm font-semibold mb-4">Profile</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
@@ -42,7 +42,7 @@ function SettingsPage() {
           </div>
         </section>
 
-        <section className="rounded-md border border-border bg-card p-5">
+        <section className="rounded-xl glass p-5">
           <h2 className="text-sm font-semibold mb-4">Preferences</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">

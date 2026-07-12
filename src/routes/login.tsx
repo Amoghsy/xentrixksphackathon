@@ -35,17 +35,33 @@ function LoginPage() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen w-full flex flex-col bg-gradient-to-b from-primary/95 to-primary text-primary-foreground">
-      <div className="flex-1 flex items-center justify-center px-4 py-10">
+    <div
+      className="relative min-h-screen w-full flex flex-col text-primary-foreground overflow-hidden"
+      style={{
+        background:
+          "radial-gradient(1000px 700px at 15% 10%, oklch(0.4 0.1 220 / 0.9), transparent 60%), radial-gradient(900px 600px at 90% 90%, oklch(0.45 0.1 190 / 0.7), transparent 60%), linear-gradient(180deg, oklch(0.22 0.06 262), oklch(0.14 0.04 262))",
+      }}
+    >
+      <div className="pointer-events-none absolute inset-0 opacity-[0.07]" style={{
+        backgroundImage: "linear-gradient(oklch(1 0 0 / 0.4) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 0.4) 1px, transparent 1px)",
+        backgroundSize: "48px 48px",
+      }} />
+      <div className="flex-1 flex items-center justify-center px-4 py-10 relative">
         <div className="w-full max-w-md">
           <div className="flex flex-col items-center text-center mb-8">
-            <div className="h-14 w-14 rounded-md bg-card text-primary flex items-center justify-center border border-border/40 shadow-sm">
-              <Shield className="h-7 w-7" />
+            <div
+              className="h-16 w-16 rounded-2xl flex items-center justify-center text-primary-foreground"
+              style={{
+                background: "var(--gradient-teal)",
+                boxShadow: "0 12px 40px -8px oklch(0.65 0.12 190 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.3)",
+              }}
+            >
+              <Shield className="h-8 w-8" />
             </div>
-            <div className="mt-4 text-xs uppercase tracking-[0.2em] text-primary-foreground/70">
+            <div className="mt-5 text-[11px] uppercase tracking-[0.24em] text-primary-foreground/70 font-medium">
               Karnataka State Police · SCRB
             </div>
-            <h1 className="mt-1 text-2xl font-semibold">Crime Intelligence Assistant</h1>
+            <h1 className="mt-1.5 text-2xl sm:text-3xl font-semibold tracking-tight">Crime Intelligence Assistant</h1>
             <p className="mt-2 text-sm text-primary-foreground/70">
               Authorised personnel only. All actions are audited.
             </p>
@@ -57,7 +73,7 @@ function LoginPage() {
               login(username, role);
               navigate({ to: "/" });
             }}
-            className="rounded-lg bg-card text-card-foreground border border-border shadow-lg p-6 space-y-4"
+            className="rounded-2xl text-card-foreground p-6 space-y-4 glass-strong"
           >
             <div className="space-y-1.5">
               <Label htmlFor="u">Username / Badge No.</Label>

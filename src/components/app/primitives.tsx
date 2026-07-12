@@ -31,14 +31,16 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 pb-5 mb-5 border-b border-border">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">{title}</h1>
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between pb-5 mb-5 border-b border-border/60">
+      <div className="min-w-0">
+        <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground truncate">
+          {title}
+        </h1>
         {subtitle && (
           <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
         )}
       </div>
-      {actions && <div className="flex items-center gap-2">{actions}</div>}
+      {actions && <div className="flex items-center gap-2 shrink-0 flex-wrap">{actions}</div>}
     </div>
   );
 }
@@ -56,17 +58,22 @@ export function StatCard({
 }) {
   const up = (delta ?? 0) >= 0;
   return (
-    <div className="rounded-md border border-border bg-card p-4">
+    <div
+      className={cn(
+        "group relative rounded-xl p-4 transition-all duration-200",
+        "glass hover:-translate-y-0.5 hover:shadow-lg",
+      )}
+    >
       <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
         {label}
       </div>
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-2xl font-semibold tabular-nums">{value}</span>
+        <span className="text-2xl font-semibold tabular-nums text-foreground">{value}</span>
         {delta !== undefined && (
           <span
             className={cn(
-              "text-xs font-medium tabular-nums",
-              up ? "text-success" : "text-destructive",
+              "text-xs font-medium tabular-nums px-1.5 py-0.5 rounded",
+              up ? "text-success bg-success/10" : "text-destructive bg-destructive/10",
             )}
           >
             {up ? "▲" : "▼"} {Math.abs(delta).toFixed(1)}%

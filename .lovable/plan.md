@@ -1,85 +1,51 @@
+# Glassmorphism Refresh + Responsive Polish
 
-# Crime Intelligence Assistant — Build Plan
+Apply a cohesive, modern glass aesthetic across the Crime Intelligence Assistant while keeping the serious, authoritative tone appropriate for Karnataka SCRB. Make the whole shell responsive down to mobile and fix navbar overflow.
 
-A frontend-only, multi-screen internal police platform for Karnataka SCRB. All data is mocked behind a clean service layer so real APIs can drop in later. Starts on the Chat Assistant screen after a mock login.
+## Visual direction
 
-## Design system
+- Deep navy → midnight gradient app background with a subtle grid/noise overlay and two soft radial "aurora" glows (navy + teal) for depth. No purple, no playful colors.
+- Cards, sidebar, topbar, chat bubbles, dialogs → frosted glass surfaces: semi-transparent card color, `backdrop-blur-xl`, 1px hairline border using `border-white/10` in dark and `border-white/40` in light, soft layered shadow.
+- Accent glow: teal `--sidebar-primary` used sparingly for active nav item, focus rings, and key CTAs (thin inner ring + outer glow shadow).
+- Typography stays Inter; tighten tracking on H1/H2, add a small uppercase eyebrow style already used in login.
+- Micro-interactions: 150–200ms ease transitions on hover for cards/nav items, subtle lift (`-translate-y-0.5` + shadow bump), animated shimmer on the active sidebar item's left indicator, `animate-fade-in` on route mount.
 
-- Palette (added as tokens in `src/styles.css`):
-  - `--primary` deep navy `#1F3864`
-  - `--destructive` muted maroon `#C0504D` (reserved for alerts / destructive only)
-  - `--background` `#F7F8FA`, `--card` white, dark slate foreground
-  - Accent teal / amber for graph node categories
-- Typography: Inter via `<link>` in `__root.tsx` head, mapped to `--font-sans`
-- Light default + optional dark mode toggle (class-based `dark` variant)
-- Dense, thin-bordered cards; subtle shadows; government/ops-console feel
-- Update `__root.tsx` head metadata to real app title/description ("Crime Intelligence Assistant — Karnataka SCRB")
+## Design tokens (src/styles.css)
 
-## Architecture
+Add, without breaking existing semantic tokens:
 
-- **Routing**: TanStack Router file-based routes under `src/routes/`
-- **Auth (mock)**: Zustand store `useAuthStore` persisting `{ user, role }` in localStorage. Pathless `_app` layout gates all app routes; unauthenticated users redirected to `/login`.
-- **Role gating**: `useRole()` hook + `<RoleGate roles={[...]}>` wrapper + `<Masked>` component that blurs sensitive fields for non-Supervisor roles with a tooltip.
-- **State**: Zustand for auth, language (EN/KN), theme, chat sessions. TanStack Query for "fetching" mock data (simulated latency → skeletons).
-- **Services layer** (`src/services/`): each file exports typed async mock functions clearly marked `// MOCK`:
-  - `auth.service.ts`, `chat.service.ts`, `cases.service.ts`, `offenders.service.ts`, `network.service.ts`, `map.service.ts`, `alerts.service.ts`, `dashboard.service.ts`, `audit.service.ts`
-- **Mock data** (`src/mocks/`): seeded generators for FIRs, offenders, network graph, alerts, chat history using realistic Karnataka/Indian context (no sensitive personal data — neutral placeholder labels for caste/religion).
-- **i18n**: light-weight `t(key)` helper with EN/KN dictionaries; toggle in top bar.
+- `--glass-bg`, `--glass-bg-strong`, `--glass-border`, `--glass-highlight` for light and dark.
+- `--shadow-elegant`, `--shadow-glow` (teal-tinted), `--shadow-inset-hairline`.
+- `--gradient-app` (navy → midnight), `--gradient-primary` (navy → teal), `--gradient-header`.
+- New `@utility glass` and `@utility glass-strong` that compose bg + backdrop-blur + border + shadow so components stay clean.
+- Keep all existing color tokens intact so no page breaks.
 
-## Route map
+## Component updates (presentation only)
 
-```text
-/login                          Login (role selector)
-/_app                           Shell: sidebar + topbar + <Outlet/>
-  /                             Chat Assistant (default)
-  /dashboard                    Analytics dashboard
-  /network                      Criminal network graph
-  /map                          Crime hotspot map
-  /cases                        Case search table
-  /cases/$firId                 Case detail (tabs)
-  /offenders                    Offender grid
-  /offenders/$id                Offender profile
-  /alerts                       Early warning center
-  /audit                        Audit log
-  /settings                     Settings
-```
+- `src/routes/_app.tsx` — wrap shell in gradient background + fixed aurora blobs (pointer-events-none), make layout responsive: sidebar becomes an off-canvas drawer under `md`, topbar shows a hamburger that opens it.
+- `src/components/app/sidebar.tsx` — apply `glass` utility, add active-item left accent bar with teal glow, smooth width transition already there; add mobile drawer mode driven by a new `mobileOpen` flag in `usePrefs` (or local state via context). Auto-collapse behavior preserved on desktop.
+- `src/components/app/topbar.tsx` — apply `glass` utility with sticky top, add hamburger button visible under `md:hidden`, hide search on `sm` (icon-only expand), collapse language/theme/bell into a compact cluster, hide name/badge text under `lg`, keep avatar + role badge. Fix current overflow by using `grid-cols-[auto_minmax(0,1fr)_auto]` with `min-w-0` on the search cell and `shrink-0` on right cluster.
+- `src/components/app/primitives.tsx` — `PageHeader` gets responsive stacking (`flex-col sm:flex-row`), `StatCard` gets glass surface + hover lift.
+- Login page — upgrade to glass card over the existing navy gradient with a soft aurora, keeps the same form.
+- Chat page (`_app.index.tsx`) — message bubbles get glass treatment (assistant = light glass, user = navy gradient); suggestion chips get glass hover state; composer becomes a floating glass bar.
+- Dashboard, Sociological, Financial, Network, Map, Alerts, Cases, Offenders, Audit, Settings — swap plain `bg-card border` panels for the `glass` utility via a small find/replace of the shared container classes; grids get responsive breakpoints (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`), tables get horizontal scroll wrappers on mobile.
 
-## Screens
+## Responsiveness rules applied everywhere
 
-1. **Login** — Shield SVG logo placeholder, "Crime Intelligence Assistant", username/password (non-functional), role dropdown (Investigator/Analyst/Supervisor/Policymaker), Sign In → stores mock user + redirects to `/`. Footer: "Confidential Government System — Authorized Personnel Only".
-2. **Shell** — Collapsible left sidebar (Chat, Dashboard, Network, Map, Cases, Offenders, Alerts, Audit, Settings) filtered by role (Policymaker hides case-level items, sees aggregate only). Top bar: global search, EN/KN toggle, notification bell w/ badge, avatar + role badge, logout.
-3. **Chat Assistant** (home) — Message list with user vs. official assistant styling (navy left border). Rich response cards render inline tables / stat cards / mini Recharts based on `response.kind`. Collapsible "Show reasoning" reveals mock SQL + row count in monospace block. Suggested query chips row. Bottom input with mic (toggle-only), send, language chip. History drawer grouped by date. "Export as PDF" button (uses `window.print` styled view). Seeded with 4–5 example exchanges.
-4. **Dashboard** — 5 KPI cards with trend deltas; 12-month multi-line crime trend (Recharts); top-5 districts bar; case-status donut; Recent Alerts panel.
-5. **Criminal Network** — `react-force-graph-2d` canvas, color legend, search box, click node → slide-in side panel with "Expand connections", zoom/reset controls. Seeded dataset with a visible cluster.
-6. **Crime Map** — Static SVG map of Karnataka districts (no external map API) with colored heat overlays; left filter panel (crime type, date range, district, gravity); intensity legend; click cluster → popover with case count / dominant crime / trend arrow.
-7. **Case Search / Detail** — Filterable paginated table (Crime No, Case No, Date, Station, Crime Head, Status, Gravity). Detail page tabs: Overview, Complainant, Accused, Victims, Acts & Sections, Arrests, Chargesheet, Timeline (vertical stepper). Sensitive demographic fields wrapped in `<Masked>`.
-8. **Offender Profiles** — Card grid (avatar, name, linked cases, risk badge Low/Med/High). Profile: case history, MO tags, risk-score horizontal bar breakdown, Similar Offenders.
-9. **Alerts** — Feed with severity tags (Info/Warning/Critical) + filters.
-10. **Audit Log** — Dense read-only paginated table, monospace query column.
-11. **Settings** — Profile, language, notifications — minimal.
-
-## Cross-cutting UX
-
-- Skeleton loaders on every "fetch" (TanStack Query + simulated 400–800ms delay)
-- Consistent empty states ("No alerts at this time")
-- Toast (sonner) for actions like Export, Logout
-- Micro-interactions: row/card hover, panel slide-in transitions, chat message fade-in
-- Fully responsive; sidebar auto-collapses < lg; tablet-friendly
-
-## Dependencies to add
-
-`zustand`, `recharts`, `react-force-graph-2d`, `d3-force` (peer), `date-fns`. shadcn/ui components already installed are reused; add sidebar/table/tabs usage.
-
-## Technical details
-
-- `src/routes/_app.tsx` — pathless auth-gated layout. `beforeLoad` checks `useAuthStore.getState().user` and `throw redirect({ to: '/login' })` if absent.
-- `Masked` component: `<span className="blur-sm select-none" title="Restricted — Supervisor access required">` when `role !== 'Supervisor'`.
-- Chat message type: `{ id, role: 'user'|'assistant', text, data?: { kind: 'table'|'stat'|'chart', ... }, sql?: string, rowCount?: number, ts }`.
-- Network graph: dynamic import of `react-force-graph-2d` inside a `client-only` effect to avoid SSR window access.
-- Karnataka map: inline SVG paths (simplified district shapes) with fill driven by heat value.
-- All service functions return `Promise<T>` with `await sleep(rand(300,700))` to trigger skeletons.
-- Update `__root.tsx` head with real title/description/OG tags; load Inter via `<link>` in head links.
+- Every header row with text + widgets uses the `grid-cols-[minmax(0,1fr)_auto]` + `min-w-0` + `shrink-0` pattern.
+- Tables wrapped in `overflow-x-auto` containers.
+- Charts use `ResponsiveContainer` (already do) but parents get min-height and `w-full`.
+- Sidebar hidden under `md`, revealed via drawer; main content full-width on mobile with safe padding (`px-4 md:px-6`).
+- Topbar controls collapse progressively: search icon-only < md, language pill hidden < sm (moves into settings).
 
 ## Out of scope
 
-Real backend, real auth, real map tiles, real NLP→SQL, PDF library (uses print stylesheet), Kannada full translations (toggle swaps a handful of labels as a demo).
+- No changes to auth store, routing guards, mock data shapes, i18n dictionary, or business logic.
+- No new dependencies.
+
+## Technical notes
+
+- Glass utilities use standard `backdrop-filter` only — Lightning CSS handles vendor prefixes; do not hand-write `-webkit-backdrop-filter`.
+- All colors stay as semantic tokens; no hardcoded hex in components.
+- Mobile drawer uses shadcn `Sheet` (already available in `components/ui`).
+- Aurora blobs are absolutely positioned divs with `blur-3xl opacity-30`, `pointer-events-none`, behind content via `-z-10`.
